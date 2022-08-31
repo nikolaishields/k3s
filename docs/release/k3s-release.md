@@ -90,7 +90,7 @@ docker run --rm -u $(id -u) \
 -v ${GLOBAL_GITCONFIG_PATH}:/go/.gitconfig \
 -e HOME=/go \
 -e GOCACHE=/go/.cache \
--w /go/src/github.com/kubernetes ${GOIMAGE}-dev ./tag.sh ${NEW_K3S_VER} 2>&1 | tee ~/tags-${NEW_K3S_VER}.log
+-w /go/src/github.com/kubernetes/kubernetes ${GOIMAGE}-dev ./tag.sh ${NEW_K3S_VER} 2>&1 | tee ~/tags-${NEW_K3S_VER}.log
 ```
 After tag.sh runs, you should see list of git push commands at the end of the output.
 Save this output to a file called ```push.sh``` and mark it as executable by running the following command:
@@ -172,7 +172,7 @@ The resulting run can be viewed here:
 [k3s-io/k3s Drone Dashboard](https://drone-publish.k3s.io/k3s-io/k3s)
 
 # Create GA Release Candidate
-Once QA has verified after 24-72 hours that the RC is good (or that any fixes have been added in follow up RC candidates), it is time for the general release.
+Once QA has verified that the RC is good (or that any fixes have been added in follow up RC candidates), it is time for the general release.
 
 1. Create new release in GH UI
 2. Set title: v1.22.5+k3s1, add description with release notes. Leave the tag section blank.
@@ -184,16 +184,17 @@ Once QA signs off on RC:
 2. Ensure as pre-release is still checked.
 3. Publish.
 
-Once CI has completed and artifacts are created:
+24 hours after CI has completed and artifacts are created:
 1. Edit release to remove pre-release, and save.
+2. Update channel server
 
 The resulting run can be viewed here: 
 [k3s-io/k3s Drone Dashboard](https://drone-publish.k3s.io/k3s-io/k3s)
 
 # Create Release Images
-The k3s-upgrade repository bundles a k3s binary and script that allows a user to upgrade to a new k3s release.
+The k3s-upgrade repository bundles a k3s binary and script that allows a user to upgrade to a new k3s release. This process is normally automated, however this can fail. If the automation does fail, do the following:
 
-Go to the [k3s-upgrade repository](https://github.com/k3s-io/k3s-upgrade) and manually create a new tag for the release. This will kick off a build of the image. This process is normally automated, however this can fail. If the automation does fail, do the following:
+Go to the [k3s-upgrade repository](https://github.com/k3s-io/k3s-upgrade) and manually create a new tag for the release. This will kick off a build of the image. 
 
 1. Draft a new release
 2. Enter the tag (e.g. v1.22.5-rc1+k3s1).
